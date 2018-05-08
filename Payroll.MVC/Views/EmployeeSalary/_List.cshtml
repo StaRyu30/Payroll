@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Payroll.ViewModel.EmployeeSalaryViewModel>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.BadgeId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PayrollPeriodId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SalaryComponentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SalaryComponentCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SalaryComponentName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BasicValue)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FinalValue)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActivated)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BadgeId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PayrollPeriodId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SalaryComponentId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SalaryComponentCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SalaryComponentName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BasicValue)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FinalValue)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActivated)
+        </td>
+        <td>
+            <center>
+                @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |*@
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-warning btn-Edit" data-id="@item.Id" title="Edit">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </button>
+                    @*<button type="button" class="btn btn-info btn-Details" data-id="@item.Id" title="Edit">
+                        <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+                    </button>*@
+                    <button type="button" class="btn btn-danger btn-Delete" data-id="@item.Id" title="Delete">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </center>
+        </td>
+    </tr>
+}
+
+</table>
