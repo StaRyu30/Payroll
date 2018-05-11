@@ -14,5 +14,11 @@ namespace Payroll.ViewModel
         public decimal SellingTotal { get; set; }
         public decimal Payment { get; set; }
         public bool IsActivated { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime ModifiedDate { get; set; }
+
+        public List<SellingDetailViewModel> Details { get; set; }
     }
 }

@@ -1,0 +1,300 @@
+﻿@{
+    ViewBag.Title = "Point of Sales";
+}
+
+<style>
+    table th {
+        width: 16%;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-6">
+        <button type="button" id="btn-Create" class="btn btn-lg btn-info" onclick="location.reload()">
+            New Transaction
+        </button>
+    </div>
+</div>
+
+<div class="box">
+    <div class="box-header">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-sm-2">
+                    <label>Date of Trans</label>
+                </div>
+                <div class="col-sm-2">
+                    <input value="@DateTime.Now.ToString("dd MMM yyyy")" readonly="readonly" />
+                </div>
+                <div class="col-sm-4">
+                </div>
+                <div class="col-sm-1">
+                    <label>Reff</label>
+                </div>
+                <div class="col-sm-2">
+                    <input id="txt-reff" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-sm-2">
+                    <label id="txt-cashier">Cashier :</label>
+                </div>
+                <div class="col-sm-2">
+                    <input value="Wati" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <button type="button" id="btn-add" class="btn btn-sm btn-success">
+                    Add Item
+                </button>
+                <button type="button" id="btn-save" class="btn btn-sm btn-warning">
+                    Save Payment
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th><center>Code</center></th>
+                        <th><center>Name</center></th>
+                        <th><center>Price</center></th>
+                        <th><center>Qty</center></th>
+                        <th><center>Amount</center></th>
+                        <th><center>Act</center></th>
+                    </tr>
+                </thead>
+                <tbody id="item-list"></tbody>
+                <tfoot>
+                    <tr>
+                        <td>Total</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><input type="number" class="form-control text-box single-line" readonly="readonly" id="txt-total" /></td>
+                    </tr>
+                    <tr>
+                        <td>Pay</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><input type="number" class="form-control text-box single-line" id="txt-pay" min="0" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <td>Change</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><input type="number" class="form-control text-box single-line" readonly="readonly" id="txt-change" /></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-Form">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">List Item</h4>
+
+                <input type="text" id="txt-search" placeholder="Search..." />&nbsp;
+                <button type="button" id="btn-search" class="btn btn-sm btn-success" onclick="GetListItem()">Search</button>
+            </div>
+
+            <div class="modal-body">
+                <p>One fine body&hellip;</p>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $("#btn-add").click(function () {
+            //$("#modal-Form").modal("show");
+            $.ajax({
+                url: "http://localhost:57405/api/items?search=" + $("#txt-search").val(),
+                type: 'get',
+                //data: $("#text-search").val(),
+                success: function (result) {
+                    //alert(JSON.stringify(result));
+
+                    var table = "<table class='table'>";
+                    table += "<thead>";
+                    table += "<tr>";
+                    table += "<th>Action</th> <th>Code</th> <th>Full Name</th> <th>Price</th>";
+                    table += "</tr>";
+                    table += "</thead>";
+                    table += "<tbody>";
+                    $.each(result, function (i, item) {
+
+                        var tr = "<tr><td><button type='button' class='btn btn-success btn-select' data-id='" + item.Id + "' onclick ='SelectItem(this)'>Select</button></td> <td>" + item.Code + "</td><td>" + item.Description + "</td><td>" + item.Price + "</td></tr>";
+
+                        //var tr = "<tr><td></td> <td>{0}</td> <td>{1}</td> <td>{2}</td></tr>".format(item.Code, item.Description, item.Price);
+                        table += tr;
+
+                    })
+                    table += "</tbody>";
+                    table += "</table>";
+                    $(".modal-body").html(table);
+                    $("#modal-Form").modal("show");
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            })
+        })
+
+        function GetListItem() {
+            $.ajax({
+                url: "http://localhost:57405/api/items?search=" + $("#txt-search").val(),
+                type: 'get',
+                success: function (result) {
+                    //alert(JSON.stringify(result));
+
+                    var table = "<table class='table'>";
+                    table += "<thead>";
+                    table += "<tr>";
+                    table += "<th>Action</th> <th>Code</th> <th>Full Name</th> <th>Price</th>";
+                    table += "</tr>";
+                    table += "</thead>";
+                    table += "<tbody>";
+                    $.each(result, function (i, item) {
+
+                        var tr = "<tr><td><button type='button' class='btn btn-success btn-select' data-id='" + item.Id + "' onclick ='SelectItem(this)'>Select</button></td> <td>" + item.Code + "</td><td>" + item.Description + "</td><td>" + item.Price + "</td></tr>";
+
+                        //var tr = "<tr><td></td> <td>{0}</td> <td>{1}</td> <td>{2}</td></tr>".format(item.Code, item.Description, item.Price);
+                        table += tr;
+
+                    })
+                    table += "</tbody>";
+                    table += "</table>";
+                    $(".modal-body").html(table);
+
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            })
+        }
+
+        function SelectItem(obj) {
+            var id = $(obj).attr("data-id");
+            $.ajax({
+                url: "http://localhost:57405/api/items/" + id,
+                type: 'get',
+                data: 'json',
+                success: function (result) {
+                    var tr = GetItem(result);
+                    $("#item-list").append(tr);
+                    $("#modal-Form").modal("hide");
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            })
+        }
+
+        function GetItem(data) {
+            var html = '<tr>';
+            html += '<td><input data-val="true" id="itemId" name="itemId" type="hidden" value="' + data.Id + '"><input class="form-control text-box single-line" id="itemCode" name="itemCode" readonly="readonly" type="text" value="' + data.Code + '"></td>';
+            html += '<td><input class="form-control text-box single-line" data-val="true" id="itemDescription" name="itemDescription" readonly="readonly" type="text" value="' + data.Description + '"></td>';
+            html += '<td><input class="form-control text-box single-line" data-val="true" id="itemPrice" name="itemPrice" readonly="readonly" type="text" value="' + data.Price + '"></td>';
+            html += '<td><input class="form-control text-box single-line" data-val="true" id="itemQty" name="itemQty" type="number" min="0" value="0" onkeypress="ChangeQty(this)"></td>';
+            html += '<td><input class="form-control text-box single-line" id="itemAmount" name="itemAmount" readonly="readonly" type="number" min="0" value="0"></td>';
+            html += '<td><button class="btn btn-danger btn-remove" type="button" onclick="Remove(this)">Remove</button></td>';
+            html += '</tr>';
+
+            return html;
+        }
+
+        function ChangeQty(obj) {
+            $(obj).keyup(function () {
+                var tr = $(obj).closest("tr");
+                var price = $(tr).find("input[name=itemPrice]").val();
+                var amount = parseFloat(price) * parseFloat($(obj).val());
+                $(tr).find("input[name=itemAmount]").val(amount);
+                CountTotal();
+            })
+        }
+
+        $("#txt-pay").keyup(function () {
+            CountTotal();
+        })
+
+        function CountTotal() {
+            var total = 0;
+            $("#item-list").find("tr").each(function () {
+                total = total + parseFloat($(this).find("input[name=itemAmount]").val());
+            })
+            $("#txt-total").val(total);
+            var pay = $("#txt-pay").val();
+            var change = 0;
+            if (pay != 0) {
+                change = $("#txt-change").val(parseFloat(parseFloat(pay) - parseFloat(total)));
+            }
+        }
+
+        function Remove(obj) {
+            $(obj).closest("tr").remove();
+            CountTotal();
+        }
+
+        $("#btn-save").click(function () {
+            var details = [];
+            $("#item-list").find("tr").each(function () {
+                var itemId = $(this).find("input[name=itemId]").val();
+                var qty = $(this).find("input[name=itemQty]").val();
+                var price = $(this).find("input[name=itemPrice]").val();
+                var amount = $(this).find("input[name=itemAmount]").val();
+
+                var data = {
+                    ItemId: itemId,
+                    Quantity: qty,
+                    Price: price,
+                    Amount: amount
+                };
+                details.push(data);
+            })
+            var now = new Date();
+            var header = {
+                DateOfSelling: now,
+                SellingTotal: $("#txt-total").val(),
+                Payment: $("#txt-pay").val(),
+                CreatedBy: $("#txt-cashier").val(),
+                Details: details
+            };
+            $.ajax({
+                url: "http://localhost:57405/api/pos",
+                type: 'post',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(header),
+                success: function (result) {
+                    if (result.Success) {
+                        $("#txt-reff").val(result.Reference);
+                        alert("Success");
+                        $("#btn-add").attr("disabled", "disabled");
+                        $("#btn-pay").attr("disabled", "disabled");
+                    }
+                    else {
+                        alert("Error : " + result.Message);
+                    }
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            })
+        })
+    </script>
+}

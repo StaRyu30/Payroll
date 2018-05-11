@@ -12,30 +12,31 @@ namespace Payroll.DataModel
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-
+    
     public partial class PayrollContext : DbContext
     {
         public PayrollContext()
             : base("name=PayrollContext")
         {
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-
-        public virtual DbSet<Attendance> Attendance { get; set; }
-        public virtual DbSet<Department> Department { get; set; }
-        public virtual DbSet<Division> Division { get; set; }
-        public virtual DbSet<Employee> Employee { get; set; }
-        public virtual DbSet<EmployeeSalary> EmployeeSalary { get; set; }
-        public virtual DbSet<Item> Item { get; set; }
-        public virtual DbSet<JobPosition> JobPosition { get; set; }
-        public virtual DbSet<PayrollPeriod> PayrollPeriod { get; set; }
-        public virtual DbSet<SalaryComponent> SalaryComponent { get; set; }
-        public virtual DbSet<SalaryDefaultValue> SalaryDefaultValue { get; set; }
-        public virtual DbSet<SellingDetail> SellingDetail { get; set; }
-        public virtual DbSet<SellingHeader> SellingHeader { get; set; }
+    
+        public virtual DbSet<Attendance> Attendances { get; set; }
+        public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<Division> Divisions { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<EmployeeSalary> EmployeeSalaries { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<JobPosition> JobPositions { get; set; }
+        public virtual DbSet<PayrollPeriod> PayrollPeriods { get; set; }
+        public virtual DbSet<SalaryComponent> SalaryComponents { get; set; }
+        public virtual DbSet<SalaryDefaultValue> SalaryDefaultValues { get; set; }
+        public virtual DbSet<SellingDetail> SellingDetails { get; set; }
+        public virtual DbSet<SellingHeader> SellingHeaders { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
     }
 }

@@ -12,16 +12,10 @@ namespace Payroll.DataModel
     using System;
     using System.Collections.Generic;
     
-    public partial class Attendance
+    public partial class Users
     {
         public int Id { get; set; }
-        public string BadgeId { get; set; }
-        public Nullable<System.DateTime> CheckIn { get; set; }
-        public Nullable<System.DateTime> CheckOut { get; set; }
-        public bool IsActivated { get; set; }
-        public string CreatedBy { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public string ModifiedBy { get; set; }
-        public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }
