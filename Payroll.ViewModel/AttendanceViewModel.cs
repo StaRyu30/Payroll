@@ -15,10 +15,10 @@ namespace Payroll.ViewModel
         public string BadgeId { get; set; }
 
         [Display(Name = "Check In"), DisplayFormat(DataFormatString = "{0:dd MMM yyyy}"), Required]
-        public DateTime CheckIn { get; set; }
+        public DateTime? CheckIn { get; set; }
 
         [Display(Name = "Check Out"), DisplayFormat(DataFormatString = "{0:dd MMM yyyy}"), Required]
-        public DateTime CheckOut { get; set; }
+        public DateTime? CheckOut { get; set; }
 
         public bool IsActivated { get; set; }
     }
