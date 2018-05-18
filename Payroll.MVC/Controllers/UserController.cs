@@ -55,7 +55,7 @@ namespace Payroll.MVC.Controllers
             {
                 message = "Invalid Request";
             }
-            return View(user);
+            return View();
         }
 
         //login
@@ -91,6 +91,7 @@ namespace Payroll.MVC.Controllers
                         }
                         else
                         {
+                            
                             return RedirectToAction("Index", "Home");
                         }
                     }

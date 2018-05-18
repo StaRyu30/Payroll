@@ -38,19 +38,42 @@ namespace Payroll.Repository
             using (var db = new PayrollContext())
             {
                 result = (from d in db.Department
-                          join div in db.Division on
-                          d.DivisionId equals div.Id
+                          //join div in db.Division on
+                          //d.DivisionId equals div.Id
                           where d.Id == id
                           select new DepartmentViewModel
                           {
                               Id = d.Id,
                               Code = d.Code,
                               DivisionId = d.DivisionId,
-                              DivisionCode = div.Code,
-                              DivisionName = div.Description,
+                              //DivisionCode = div.Code,
+                              //DivisionName = div.Description,
                               Description = d.Description,
                               IsActivated = d.IsActivated
                           }).FirstOrDefault();
+            }
+            return result;
+        }
+
+        public static List<DepartmentViewModel> GetByDivId(int divId)
+        {
+            List<DepartmentViewModel> result = new List<DepartmentViewModel>();
+            using (var db = new PayrollContext())
+            {
+                result = (from div in db.Division
+                          join dep in db.Department on
+                          div.Id equals dep.DivisionId
+                          where div.Id == divId
+                          select new DepartmentViewModel
+                          {
+                              Id = dep.Id,
+                              Code = dep.Code,
+                              Description = dep.Description,
+                              DivisionId = div.Id,
+                              DivisionCode = div.Code,
+                              DivisionName = div.Description,
+                              IsActivated = dep.IsActivated
+                          }).ToList();
             }
             return result;
         }

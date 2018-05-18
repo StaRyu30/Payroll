@@ -7,8 +7,8 @@
 @using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { id = "edit-form", name = "edit-form" }))
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">        
+
+    <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
 
@@ -21,14 +21,35 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.JobPositionId, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.DivisionId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.JobPositionId, (IEnumerable<SelectListItem>)ViewBag.JobPositionList, "Select Job Position", new { @class = "form-control" })
-                @*@Html.EditorFor(model => model.JobPositionId, new { htmlAttributes = new { @class = "form-control" } })*@
-                @Html.ValidationMessageFor(model => model.JobPositionId, "", new { @class = "text-danger" })
+                <select class="form-control valid" data-val="true" data-val-number="The field Division must be a number." data-val-required="The Department field is required." id="DivisionId" name="DivisionId">
+                    <option value="">Select Division</option>
+                    option>
+                </select>
             </div>
         </div>
-                
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DepartmentId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control valid" data-val="true" data-val-number="The field Division must be a number." data-val-required="The Department field is required." id="DepartmentId" name="DepartmentId">
+                    <option value="">Select Department</option>
+                    <option selected="selected" value="@Model.DepartmentId">@Model.DepartmentName</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.JobPositionId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control valid" data-val="true" data-val-number="The field Division must be a number." data-val-required="The Job Position field is required." id="JobPositionId" name="JobPositionId">
+                    <option value="">Select Job Position</option>
+                    <option selected="selected" value="@Model.JobPositionId">@Model.JobName</option>
+                </select>
+            </div>
+        </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -72,7 +93,7 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.DateOfResign, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">                
+            <div class="col-md-10">
                 @Html.EditorFor(model => model.DateOfResign, new { htmlAttributes = new { @class = "form-control datepicker", @Value = string.Format("{0:dd MMM yyyy}", Model.DateOfResign) } })
                 @Html.ValidationMessageFor(model => model.DateOfResign, "", new { @class = "text-danger" })
             </div>
@@ -123,12 +144,83 @@
 
 
 
-    @Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jqueryval")
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        SetDivisionId(@Model.DivisionId);
+        SetDepartmentId(@Model.DivisionId, @Model.DepartmentId);
+        SetJobPositionId(@Model.DepartmentId, @Model.JobPositionId);
+    })
+
+    function SetDivisionId(divId) {
+        $.ajax({
+            url: 'http://localhost:57405/api/division/',
+            type: 'get',
+            success: function (result) {
+                $.each(result, function (i, item) {
+                    $('#DivisionId').html('<option value="0">Select Division</option>');
+                    $('#DepartmentId').html('<option value="0">Select Department</option>');
+                    $.each(result, function (i, item) {
+                        var option = '<option value="' + item.Id + '">' + item.Description + '</option>';
+                        $('#DivisionId').append(option);
+                    })
+                })
+                $('#DivisionId').val(divId);
+            },
+            error: function (err) {
+                alert(err);
+                $('#DepartmentId').html('<option value="0">Select Department</option>');
+                $('#JobPositionId').html('<option value="0">Select Job Position</option>');
+            }
+        })
+    }
+
+    function SetDepartmentId(divId, depId) {
+        $.ajax({
+            url: 'http://localhost:57405/api/division/' + divId,
+            type: 'get',
+            success: function (result) {
+                $.each(result, function (i, item) {
+                    $('#DepartmentId').html('<option value="0">Select Department</option>');
+                    $('#JobPositionId').html('<option value="0">Select Job Position</option>');
+                    $.each(result, function (i, item) {
+                        var option = '<option value="' + item.Id + '">' + item.Description + '</option>';
+                        $('#DepartmentId').append(option);
+                    })
+                })
+                $('#DepartmentId').val(depId);
+            },
+            error: function (err) {
+                alert(err);
+                $('#JobPositionId').html('<option value="0">Select Job Position</option>');
+            }
+        })
+    }
+
+    function SetDepartmentId(depId, jpId) {
+        $.ajax({
+            url: 'http://localhost:57405/api/division/' + depId,
+            type: 'get',
+            success: function (result) {
+                $.each(result, function (i, item) {
+                    $('#JobPositionId').html('<option value="0">Select Job Position</option>');
+                    $.each(result, function (i, item) {
+                        var option = '<option value="' + item.Id + '">' + item.Description + '</option>';
+                        $('#JobPositionId').append(option);
+                    })
+                })
+                $('#JobPositionId').val(jpId);
+            },
+            error: function (err) {
+                alert(err);
+            }
+        })
+    }
+
     $(".datepicker").datepicker({
         format: 'dd M yyyy'
-    }) 
+    })
     $("#edit-form").submit(function () {
         $.ajax({
             url: '@Url.Action("Edit","Employee")',
@@ -147,5 +239,13 @@
         })
         return false;
     })
+
+    $('#DivisionId').change(function () {
+        SetDepartmentId($(this).val(), 0);
+    });
+
+    $('#DepartmentId').change(function () {
+        SetJobPositionId($(this).val(), 0);
+    });
 
 </script>

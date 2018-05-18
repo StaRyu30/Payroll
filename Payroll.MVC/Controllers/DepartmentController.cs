@@ -1,13 +1,16 @@
-﻿using Payroll.Repository;
+﻿using Payroll.MVC.Security;
+using Payroll.Repository;
 using Payroll.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Payroll.MVC.Controllers
 {
+    [CustomAuthorize(Roles = "Department")]
     public class DepartmentController : Controller
     {
         // GET: Department
@@ -23,6 +26,7 @@ namespace Payroll.MVC.Controllers
         }
 
         //GET create
+        [CustomAuthorize(Roles = "Department", AccessLevel = "W")]
         public ActionResult Create()
         {
             ViewBag.DivisionList = new SelectList(DivisionRepo.Get(),"Id","Description");
@@ -31,6 +35,7 @@ namespace Payroll.MVC.Controllers
 
         //POST create
         [HttpPost]
+        [CustomAuthorize(Roles = "Department", AccessLevel = "W")]
         public ActionResult Create(DepartmentViewModel model)
         {
             if (ModelState.IsValid)
@@ -49,6 +54,7 @@ namespace Payroll.MVC.Controllers
         }
 
         //GET Edit
+        [CustomAuthorize(Roles = "Department", AccessLevel = "W")]
         public ActionResult Edit(int Id)
         {
             ViewBag.DivisionList = new SelectList(DivisionRepo.Get(), "Id", "Description");
@@ -57,6 +63,7 @@ namespace Payroll.MVC.Controllers
 
         //POST EDIT
         [HttpPost]
+        [CustomAuthorize(Roles = "Department", AccessLevel = "W")]
         public ActionResult Edit(DepartmentViewModel model)
         {
             if (ModelState.IsValid)
@@ -75,6 +82,7 @@ namespace Payroll.MVC.Controllers
         }
 
         //GET DELETE
+        [CustomAuthorize(Roles = "Department", AccessLevel = "W")]
         public ActionResult Delete(int id)
         {            
             return View("_Delete", DepartmentRepo.GetById(id));
@@ -82,6 +90,7 @@ namespace Payroll.MVC.Controllers
         
         //POST DELETE
         [HttpPost]
+        [CustomAuthorize(Roles = "Department", AccessLevel = "W")]
         public ActionResult DeleteConfirm(int id)
         {
             Responses responses = (DepartmentRepo.Delete(id));

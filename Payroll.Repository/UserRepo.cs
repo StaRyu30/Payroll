@@ -37,6 +37,7 @@ namespace Payroll.Repository
                     Users us = new Users();
                     us.Username = entity.Username;
                     us.Password = entity.Password;
+                    us.Roles = "Employee";
                     db.Users.Add(us);
                     db.SaveChanges();
                 }

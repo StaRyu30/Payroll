@@ -63,7 +63,7 @@
     $(".btn-Delete-Confirm").click(function () {
 
         $.ajax({
-            url: '@Url.Action("DeleteConfirm","Department")',
+            url: '@Url.Action("DeleteConfirm", "Department")',
             type: "post",
             data: { id : $(this).attr("data-id") },
             success: function (result) {

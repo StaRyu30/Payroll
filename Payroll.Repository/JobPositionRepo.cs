@@ -18,6 +18,8 @@ namespace Payroll.Repository
                 result = (from d in db.JobPosition
                           join dep in db.Department on
                           d.DepartmentId equals dep.Id
+                          join div in db.Division on
+                          dep.DivisionId equals div.Id
                           select new JobPositionViewModel
                           {
                               Id = d.Id,
@@ -25,6 +27,7 @@ namespace Payroll.Repository
                               DepartmentId = d.DepartmentId,
                               DepartmentCode = dep.Code,
                               DepartmentName = dep.Description,
+                              DivisionCode = div.Code,
                               Description = d.Description,                              
                               IsActivated = d.IsActivated
                           }).ToList();
@@ -50,6 +53,29 @@ namespace Payroll.Repository
                               Description = d.Description,                              
                               IsActivated = d.IsActivated
                           }).FirstOrDefault();
+            }
+            return result;
+        }
+
+        public static List<JobPositionViewModel> GetByDeptId(int deptId)
+        {
+            List<JobPositionViewModel> result = new List<JobPositionViewModel>();
+            using (var db = new PayrollContext())
+            {
+                result = (from dep in db.Department
+                          join jp in db.JobPosition on
+                          dep.Id equals jp.DepartmentId
+                          where dep.Id == deptId
+                          select new JobPositionViewModel
+                          {
+                              Id = jp.Id,
+                              Code = jp.Code,
+                              DepartmentId = dep.Id,
+                              DepartmentCode = dep.Code,
+                              DepartmentName = dep.Description,
+                              Description = jp.Description,
+                              IsActivated = jp.IsActivated
+                          }).ToList();
             }
             return result;
         }

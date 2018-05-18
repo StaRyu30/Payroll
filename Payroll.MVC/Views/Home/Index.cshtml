@@ -2,13 +2,24 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <div class="row">
-        <div class="col-lg-12" id="select-current-period">
+@using Payroll.MVC.Security;
+@using Payroll.Repository;
 
-        </div>
-    </div>
-</div>
+@{
+    if (Request.IsAuthenticated)
+    {
+        foreach (var form in AccountRepo.GetPrivilegeFormsByUsername(SessionPersister.Username))
+        {
+            <div class="row">
+                <div class="col-md-4" id="select-current-period">
+
+                </div>
+            </div>
+        }
+
+    }
+}
+
 
 <div class="row">
     <div class="col-md-4">

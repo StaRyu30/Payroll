@@ -23,6 +23,13 @@ namespace Payroll.API.Controllers
             return JobPositionRepo.GetById(id);
         }
 
+        [HttpGet]
+        [Route("~/api/jobpositions/department/{deptId}")]
+        public IEnumerable<JobPositionViewModel> GetByDep(int deptId)
+        {
+            return JobPositionRepo.GetByDeptId(deptId);
+        }
+
         // POST api/<controller>
         public Responses Post([FromBody]JobPositionViewModel entity)
         {
